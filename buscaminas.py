@@ -6,14 +6,13 @@
 #	- Opción del menú Ayuda - Acerca de...
 #	- Habilitar contador de tiempo.
 #	- Añadir a la ventana información sobre el tiempo y las banderas.
-#	- Añadir a la interfaz boton para Iniciar/Reiniciar
+#	- Añadir a la ventana boton para Iniciar/Reiniciar
 #	- Añadir lista de mejores resultados.
 #   - Añadir mensajes para cuando se gana o se pierde.
 #   - Documentar el código.
 #   - Añadir accesos para el teclado más opciones del menú.
 #   - Añadir la posibilidad de cambiar las imágenes.
 #   - Hacer que la primera casilla que se destape no tenga mina.
-#   - Cambiar los cuadros de texto de la ventana de personalización por controles deslizantes.
 #   - Hacer que mientras se esté pulsando sobre una casilla destapada, se marquen las que la rodean 
 #     sin destapar.
 #   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del 
@@ -57,12 +56,6 @@ opcion.set(1)
 
 personalizado = []
 
-mensajeError1="Por favor, introduce un valor numérico."
-mensajeError2="El número de cuadros horizontales debe de estar entre 3 y 40."
-mensajeError3="El número de cuadros verticales debe de estar entre 3 y 40."
-mensajeError4="Por favor, rellena todos los campos."
-tituloError="Dato introducido erróneo"
-
 def dificultadFacil():
     xmax=10 #límite de filas de botones
     ymax=10 #límite de columnas de botones
@@ -104,75 +97,54 @@ def dificultadPersonalizada(x, y, t, m):
     ymax = y
     tamaño = t
     minasMaximo = m
-    str(ymax*30) + "x" + str(xmax*30 + 50)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
 
 def personalizar():
     personalizar = Tk()
     personalizar.resizable(False, False)
     personalizar.title("Personalizar tablero")
-    personalizar.geometry("300x190")
+    personalizar.geometry("500x200")
 
-    texto1 = Label(personalizar, text="Cuadros en vertical: ", width=17, anchor="e", justify=LEFT).place(x=10, y=20)
-    texto2 = Label(personalizar, text="Cuadros en horizontal: ", width=17, anchor="e", justify=LEFT).place(x=10, y=50)
-    texto3 = Label(personalizar, text="Número de minas: ", width=17, anchor="e", justify=LEFT).place(x=10, y=80)
+    marco = Frame(personalizar)
+    marco.place(x=20, y=20)
 
-    cuadrosVertical = Entry(personalizar, width=10)
-    cuadrosVertical.place(x=140, y=20)
-    cuadrosHorizontal = Entry(personalizar, width=10)
-    cuadrosHorizontal.place(x=140, y=50)
-    minas = Entry(personalizar, width=10)
-    minas.place(x=140, y=80)
+    def valor(e):
+        textoVertical.config(text=cuadrosVertical.get())
+        textoHorizontal.config(text=cuadrosHorizontal.get())
+        textoMinas.config(text=minas.get())
+        minasMaximo = cuadrosHorizontal.get()*cuadrosVertical.get()
+        minas.config(to_=minasMaximo)
+           
+    texto1 = Label(marco, text="Cuadros en vertical: ", width=17, anchor="e", justify=LEFT).grid(row=0, column=0)
+    texto2 = Label(marco, text="Cuadros en horizontal: ", width=17, anchor="e", justify=LEFT).grid(row=1, column=0)
+    texto3 = Label(marco, text="Número de minas: ", width=17, anchor="e", justify=LEFT).grid(row=2, column=0)
+      
+    cuadrosVertical = Scale(marco, from_=3, to_=29, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
+    cuadrosVertical.grid(row=0, column=1)
+    cuadrosHorizontal = Scale(marco, from_=3, to_=60, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
+    cuadrosHorizontal.grid(row=1, column=1)
+    minas = Scale(marco, from_=1, to_=cuadrosHorizontal.get()*cuadrosVertical.get(), resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
+    minas.grid(row=2, column=1)
+   
+    textoVertical = Label(marco,text="3", width=3, anchor="e", justify=LEFT, bg="#CCCCCC", bd=1, relief=SUNKEN)
+    textoVertical.grid(row=0, column=3)
+    textoHorizontal = Label(marco, text="3", width=3, anchor="e", justify=LEFT, bg="#CCCCCC", bd=1, relief=SUNKEN)
+    textoHorizontal.grid(row=1, column=3)
+    textoMinas = Label(marco, text="1", width=3, anchor="e", justify=LEFT, bg="#CCCCCC", bd=1, relief=SUNKEN)
+    textoMinas.grid(row=2, column=3)
 
-    listaCuadros = [cuadrosVertical, cuadrosHorizontal, minas, personalizar]
+    def enviar():
+        personalizado.clear()
+        personalizado.append(cuadrosVertical.get())
+        personalizado.append(cuadrosHorizontal.get())
+        personalizado.append(cuadrosHorizontal.get()*cuadrosVertical.get())
+        personalizado.append(minas.get())
+        dificultadPersonalizada(personalizado[0], personalizado[1], personalizado[2], personalizado[3])
+        personalizar.destroy()
 
-    confirmar = Button(personalizar, text="Aceptar", command=lambda: validar(listaCuadros))
-    confirmar.place(x=150, y=110)
+    confirmar = Button(personalizar, text="Aceptar", command=lambda: enviar())
+    confirmar.place(x=425, y=140)
 
-def validar(lista):
-    personalizado.clear()
-    tamañoVertical = lista[0].get()
-    tamañoHorizontal = lista[1].get()
-    numeroMinas = lista[2].get()
-
-    if tamañoVertical != "" and tamañoHorizontal != "" and numeroMinas != "":
-        if tamañoVertical.isdecimal():
-            if 3 <= int(tamañoVertical) <= 40:
-                lista[0].config(bg="#FFFFFF")
-                if tamañoHorizontal.isdecimal():
-                    if 3 <= int(tamañoHorizontal) <= 40:
-                        lista[1].config(bg="#FFFFFF")
-                        if numeroMinas.isdecimal():
-                            if 1 <= int(numeroMinas) <= int(tamañoHorizontal)*int(tamañoVertical):    
-                                lista[2].config(bg="#FFFFFF")
-                                personalizado.append(int(tamañoVertical))
-                                personalizado.append(int(tamañoHorizontal))
-                                personalizado.append(int(tamañoHorizontal) * int(tamañoVertical))
-                                personalizado.append(int(numeroMinas))
-                                dificultadPersonalizada(personalizado[0], personalizado[1], personalizado[2], personalizado[3])
-                                lista[3].destroy()
-                            else:
-                                msg.showinfo(title=tituloError, message="El número de minas debe de estar entre 1 y " + str(int(tamañoHorizontal)*int(tamañoVertical)))
-                                lista[2].config(bg="#FFA5A5")
-                        else:
-                            msg.showinfo(title=tituloError, message=mensajeError1)
-                            lista[2].config(bg="#FFA5A5")
-                    else:
-                        msg.showinfo(title=tituloError, message=mensajeError2)
-                        lista[1].config(bg="#FFA5A5")
-                else:
-                    msg.showinfo(title=tituloError, message=mensajeError1)
-                    lista[1].config(bg="#FFA5A5")
-            else:
-                msg.showinfo(title=tituloError, message=mensajeError3)
-                lista[0].config(bg="#FFA5A5")
-        else:          
-            msg.showinfo(title=tituloError, message=mensajeError1)
-            lista[0].focus
-            lista[0].config(bg="#FFA5A5")
-    else:
-        msg.showinfo(title=tituloError, message=mensajeError4)
-    
 def imagenAdyacentes(minas):
     numeroBandera = None
     if minas == 1:
@@ -197,7 +169,7 @@ def revelarTablero():
         n += 1
     for i in range(n):
         if listaBotones[i].bind("<Button-1>"):
-            if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1":
+            if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1": 
                 listaBotones[i].config(image=bombaNormal)
                 listaBotones[i].unbind("<Button-1>")
             elif listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage2":
