@@ -334,10 +334,7 @@ def ponerBandera(e, coord, minasMaximo, tamaño):
             contadorBanderas -= 1
         elif listaBotones[coord].cget("image") == "pyimage1": 
             listaBotones[coord].config(image=bandera)
-            contadorBanderas += 1
-    #if contadorBanderas == minasMaximo:
-    #    if comprobarSiGanar(minasMaximo, tamaño):
-    #        ganar()
+            contadorBanderas += 1 
 
 def comprobarSiGanar(minasMaximo, tamaño):
     contarNormal = 0

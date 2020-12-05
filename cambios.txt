@@ -1,5 +1,12 @@
+30 de noviembre de 2020:
+    - Primera versión subida a Github
 
+2 de diciembre de 2020:
+    - Se han cambiado los cuadros de texto de la ventana de personalización por controles deslizantes.
+    - Cambios menores.
 
 5 de diciembre: 
-    - Añadida la opción de que al pulsar F3 se muestra dónde están las minas.
+    - Se ha añadido la opción de que al pulsar F3 se muestra dónde están las minas.
+    - Actualizada la lista de Cosas pendientes.
+    - Se ha añadido el archivo Cambios.txt.
     - Cambios menores.
