@@ -1,0 +1,5 @@
+
+
+5 de diciembre: 
+    - Añadida la opción de que al pulsar F3 se muestra dónde están las minas.
+    - Cambios menores.

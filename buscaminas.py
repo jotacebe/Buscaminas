@@ -17,6 +17,9 @@
 #     sin destapar.
 #   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del 
 #     tablero.
+#   - Hacer que la ventana de personalizar sea modal.
+#   - Hacer que cuando se establezca un tamaño personalizado de tablero, al volver a entrar en la
+#     ventana de personalizar muestre los valore indicados anteriormente.
 #################################################################################################
 
 from tkinter import *
@@ -44,6 +47,7 @@ numero4 = PhotoImage(file="proyectos/buscaminas/img/numero4.gif")
 numero5 = PhotoImage(file="proyectos/buscaminas/img/numero5.gif")
 numero6 = PhotoImage(file="proyectos/buscaminas/img/numero6.gif")
 numero7 = PhotoImage(file="proyectos/buscaminas/img/numero7.gif")
+numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif")
 botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
 banderaPista = PhotoImage(file="proyectos/buscaminas/img/banderaPistas.gif")
@@ -161,13 +165,12 @@ def imagenAdyacentes(minas):
         numeroBandera = numero6
     elif minas == 7:
         numeroBandera = numero7
+    elif minas == 8:
+        numeroBandera = numero8
     return numeroBandera
     
 def revelarTablero():
-    n = 0
-    for i in listaBotones:
-        n += 1
-    for i in range(n):
+    for i in range(len(listaBotones)):
         if listaBotones[i].bind("<Button-1>"):
             if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1": 
                 listaBotones[i].config(image=bombaNormal)
@@ -325,16 +328,16 @@ def ponerBandera(e, coord, minasMaximo, tamaño):
     for i in range(tamaño):
         if listaBotones[i].cget("image") == "pyimage2":
             contadorBanderas += 1
-    if listaBotones[coord].cget("state")==NORMAL:
+    if listaBotones[coord].bind("<Button-1>"):
         if listaBotones[coord].cget("image") == "pyimage2":
             listaBotones[coord].config(image=botonNormal)
             contadorBanderas -= 1
         elif listaBotones[coord].cget("image") == "pyimage1": 
             listaBotones[coord].config(image=bandera)
             contadorBanderas += 1
-    if contadorBanderas == minasMaximo:
-        if comprobarSiGanar(minasMaximo, tamaño):
-            ganar()
+    #if contadorBanderas == minasMaximo:
+    #    if comprobarSiGanar(minasMaximo, tamaño):
+    #        ganar()
 
 def comprobarSiGanar(minasMaximo, tamaño):
     contarNormal = 0
@@ -370,6 +373,11 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
 dificultadFacil()
 menúOpciones()
 
-ventana.bind("<F2>", nuevo)
+def solucion(e):
+    for i in range(len(listaMinas)):
+        if listaMinas[i] == 1:
+            listaBotones[i].config(image=banderaPista)
 
+ventana.bind("<F2>", nuevo)
+ventana.bind("<F3>", solucion)
 ventana.mainloop()
