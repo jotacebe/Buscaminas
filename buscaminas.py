@@ -51,9 +51,12 @@ numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif")
 botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
 banderaPista = PhotoImage(file="proyectos/buscaminas/img/banderaPistas.gif")
+botonDeshabilitado2 = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
+bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
 
 listaMinas = []
 listaBotones = []
+listaAdyacentes = []
 
 opcion = IntVar()
 opcion.set(1)
@@ -123,9 +126,9 @@ def personalizar():
     texto2 = Label(marco, text="Cuadros en horizontal: ", width=17, anchor="e", justify=LEFT).grid(row=1, column=0)
     texto3 = Label(marco, text="Número de minas: ", width=17, anchor="e", justify=LEFT).grid(row=2, column=0)
       
-    cuadrosVertical = Scale(marco, from_=3, to_=29, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
+    cuadrosVertical = Scale(marco, from_=3, to_=20, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
     cuadrosVertical.grid(row=0, column=1)
-    cuadrosHorizontal = Scale(marco, from_=3, to_=60, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
+    cuadrosHorizontal = Scale(marco, from_=3, to_=50, resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
     cuadrosHorizontal.grid(row=1, column=1)
     minas = Scale(marco, from_=1, to_=cuadrosHorizontal.get()*cuadrosVertical.get(), resolution=1, orient="horizontal", width=18, length=300, showvalue=False, command=valor)
     minas.grid(row=2, column=1)
@@ -168,7 +171,34 @@ def imagenAdyacentes(minas):
     elif minas == 8:
         numeroBandera = numero8
     return numeroBandera
-    
+
+def contarBanderas(coord, xmax, ymax):
+    banderas = 0
+    adyacentes = calcularAdyacentes(coord, xmax, ymax)
+    for i in adyacentes:
+        if listaBotones[i].cget("image") == "pyimage2":
+            banderas += 1
+    return banderas
+
+def verAdyacentes(e, coord, xmax, ymax):
+    listaAdyacentes.clear()
+    adyacentes = calcularAdyacentes(coord, xmax, ymax)   
+    for i in adyacentes:
+        if listaBotones[i].cget("image")=="pyimage1" or listaBotones[i].cget("image")=="pyimage2":
+            listaAdyacentes.append(listaBotones[i])
+            if listaBotones[i].cget("image") == "pyimage1":
+                listaBotones[i].config(image=botonDeshabilitado2)
+
+def ocultarAdyacentes(e, coord, xmax, ymax, tamaño, minasMaximo):
+    minas = contarMinas(coord, xmax, ymax)
+    banderas = contarBanderas(coord, xmax, ymax)
+    adyacentes = calcularAdyacentes(coord, xmax, ymax)
+    for i in adyacentes:
+        if listaBotones[i].cget("image") == "pyimage17":
+            listaBotones[i].config(image=botonNormal)
+            if minas == banderas:
+                comprobarMinas(i, xmax, ymax, tamaño, minasMaximo)
+                 
 def revelarTablero():
     for i in range(len(listaBotones)):
         if listaBotones[i].bind("<Button-1>"):
@@ -295,9 +325,11 @@ def comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo):
                 adyacentes = calcularAdyacentes(coord, xmax, ymax)
                 for i in range(len(adyacentes)):
                     comprobarMinas(adyacentes[i], xmax, ymax, tamaño, minasMaximo)                
-
             if comprobarSiGanar(minasMaximo, tamaño):
                 ganar()
+            if listaBotones[coord].cget("image") in ["pyimage6", "pyimage7", "pyimage8", "pyimage9", "pyimage10", "pyimage11", "pyimage12", "pyimage13"]:
+                listaBotones[coord].bind("<Button-3>", lambda e, c=coord, x=xmax, y=ymax: verAdyacentes(e, c, x, y))
+                listaBotones[coord].bind("<ButtonRelease-3>", lambda e, c=coord, x=xmax, y=ymax, t=tamaño, m=minasMaximo: ocultarAdyacentes(e, c, x, y, t, m))
 
 def perder(coord):
     listaBotones[coord].config(image=bombaExplota)
@@ -323,7 +355,7 @@ def colocarMinas(xmax, ymax, tamaño, minasMaximo):
             listaMinas[posicion] = 1
             num += 1
 
-def ponerBandera(e, coord, minasMaximo, tamaño):
+def ponerBandera(e, coord, tamaño):
     contadorBanderas = 0
     for i in range(tamaño):
         if listaBotones[i].cget("image") == "pyimage2":
@@ -361,7 +393,7 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
                 texto = str(ymax*j + k)
                 nombreBoton = Label(marcoBotones, image=botonNormal, border=0)  
                 nombreBoton.grid(row=j, column=k)
-                nombreBoton.bind("<Button-3>", lambda e, coord = int(texto), minasMaximo=minasMaximo, tamaño=tamaño: ponerBandera(e, coord, minasMaximo, tamaño))
+                nombreBoton.bind("<Button-3>", lambda e, coord = int(texto), tamaño=tamaño: ponerBandera(e, coord, tamaño))
                 nombreBoton.bind("<Button-1>", lambda e, coord=int(texto), tamaño=tamaño, xmax=xmax, ymax=ymax, minasMaximo=minasMaximo: comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo))
                 listaBotones.append(nombreBoton)
                 i += 1 
@@ -373,7 +405,7 @@ menúOpciones()
 def solucion(e):
     for i in range(len(listaMinas)):
         if listaMinas[i] == 1:
-            listaBotones[i].config(image=banderaPista)
+            listaBotones[i].config(image=bombaFantasma)
 
 ventana.bind("<F2>", nuevo)
 ventana.bind("<F3>", solucion)
