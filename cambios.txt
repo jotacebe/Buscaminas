@@ -10,3 +10,11 @@
     - Actualizada la lista de Cosas pendientes.
     - Se ha añadido el archivo Cambios.txt.
     - Cambios menores.
+
+7 de diciembre:
+    - Se ha hecho que al pulsar sobre una casilla destapada con número, se marquen las casillas
+      sin destapar que la rodean y si en dichas casillas hay marcadas con bandera tantas casillas
+      como minas indica el número, se comprueba si la bandera está bien puesta.
+    - Actualizada la lista de Cosas pendientes.
+    - Actualizado el archivo Cambios.txt
+    - Añadida la imagen que se mostrará en la posición de las minas al pulsar F3.
