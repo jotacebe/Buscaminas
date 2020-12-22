@@ -18,3 +18,30 @@
     - Actualizada la lista de Cosas pendientes.
     - Actualizado el archivo Cambios.txt
     - Añadida la imagen que se mostrará en la posición de las minas al pulsar F3.
+
+8 de diciembre:
+    - La ventana de personalización se ha hecho modal.
+    - Cuando se establece un tamaño personalizado, al volver a entrar en la ventana de personalización, los marcadores de
+      los controles deslizantes aparecen en la posición seleccionada anteriormente.
+    - Actualizado el archivo Cambios.txt
+
+21 de diciembre:
+    - Se ha cambiado por completo la función comprobarSiGanar
+    - Se ha modificadola función ponerBandera de manera que ahora no se puede pinchar sobre una casilla
+      con bandera.
+    - Se ha cambiado la opción Interrogantes del menú, por la opción Adyacentes.
+    - Ahora, para que al pulsar sobre una casilla con número se muestren y, cuando sea posible, se eliminen las casillas de
+      su alrededor, deberá de haberse marcado la opción Adyacentes del menú.
+    - Ahora, en un tablero personalizado siempre hay, como mínimo, una casilla sin mina.
+    - Al pulsar F3 o la opción Pista del menú se muestran las minas durante un breve instante de tiempo. Esta opción solo se
+      puede usar un número determinado de veces, superado el cual se pierde la partida.
+    - Añadido atajos de teclado al menú para las siguientes opciones:
+          Dificultad facil: CTRL + 1
+          Dificultad media: CTRL + 2
+          Dificultad difícil: CTRL + 3
+          Dificultad extrema: CTRL + 4
+          Pista: F3
+
+    - Actualizada la lista de Cosas pendientes.
+    - Actualizado el archivo cambios.txt
+    - Otros cambios menores
