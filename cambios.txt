@@ -45,3 +45,13 @@
     - Actualizada la lista de Cosas pendientes.
     - Actualizado el archivo cambios.txt
     - Otros cambios menores
+
+26 de diciembre:
+  - Se ha cambiado la imagen del botón adyacente.
+
+31 de diciembre
+  - Se ha hecho que la primera casilla que se pulse no tenga mina.
+  - Actualizada la lista de Cosas pendientes.
+  - Actualizado el archivo cambios.txt.
+  - Otros cambios menores.
+

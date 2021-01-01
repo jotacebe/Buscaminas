@@ -12,7 +12,6 @@
 #   - Añadir accesos para el teclado a más opciones del menú.
 #   - Añadir la posibilidad de cambiar las imágenes.
 #   - Mostrar información sobre las pistas disponibles en la ventana.
-#   - Hacer que la primera casilla que se destape no tenga mina.
 #   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del 
 #     tablero.
 #################################################################################################
@@ -20,22 +19,23 @@
 from tkinter import *
 from tkinter import messagebox as msg
 from random import randint
-import time as tiempo
 
 ventana = Tk()
 ventana.geometry("400x400")
 ventana.title("Buscaminas")
 #ventana.resizable(False, False)
 
+
 marcoBotones = Frame(ventana)
 marcoBotones.place(x=20, y=60)
-marcoBotones.config(border=1, bg="#0000FF")
+marcoBotones.config(border=2, bg="#DDDDDD")
 
 contadorBanderas = Label(ventana)
 contadorBanderas.place(x=20, y=20)
 
 temporizador = Label(ventana)
 temporizador.place(x=100, y=20)
+temporizador.config(text="0")
 
 botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif")
 bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif")
@@ -52,8 +52,7 @@ numero7 = PhotoImage(file="proyectos/buscaminas/img/numero7.gif")
 numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif")
 botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
-banderaPista = PhotoImage(file="proyectos/buscaminas/img/banderaPistas.gif")
-botonDeshabilitado2 = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
+botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif")
 bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
 
 listaMinas = []
@@ -66,6 +65,10 @@ menuAdyacentes = BooleanVar()
 menuAdyacentes.set(False)
 vidas = IntVar()
 vidas.set(4)
+tiempoIniciado = BooleanVar()
+tiempoIniciado.set(False)
+primeraCasilla = BooleanVar()
+primeraCasilla.set(True)
 
 personalizado = []
 tamañoPersonalizado = [3, 3, 0]
@@ -119,6 +122,7 @@ def dificultadPersonalizada(x, y, t, m):
     ymax = y
     tamaño = t
     minasMaximo = m
+    vidas.set(5)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
 
@@ -199,7 +203,7 @@ def contarBanderas(coord, xmax, ymax):
     banderas = 0
     adyacentes = calcularAdyacentes(coord, xmax, ymax)
     for i in adyacentes:
-        if listaBotones[i].cget("image") == "pyimage2" or listaBotones[i].cget("image") == "pyimage16":
+        if listaBotones[i].cget("image") == "pyimage2": 
             banderas += 1
     return banderas
 
@@ -211,14 +215,14 @@ def verAdyacentes(e, coord, xmax, ymax):
             if listaBotones[i].cget("image")=="pyimage1" or listaBotones[i].cget("image")=="pyimage2":
                 listaAdyacentes.append(listaBotones[i])
                 if listaBotones[i].cget("image") == "pyimage1":
-                    listaBotones[i].config(image=botonDeshabilitado2)
+                    listaBotones[i].config(image=botonPista)
 
 def ocultarAdyacentes(e, coord, xmax, ymax, tamaño, minasMaximo):
     minas = contarMinas(coord, xmax, ymax)
     banderas = contarBanderas(coord, xmax, ymax)
     adyacentes = calcularAdyacentes(coord, xmax, ymax)
     for i in adyacentes:
-        if listaBotones[i].cget("image") == "pyimage17":
+        if listaBotones[i].cget("image") == "pyimage16":
             listaBotones[i].config(image=botonNormal)
             if minas == banderas:
                 comprobarMinas(i, xmax, ymax, tamaño, minasMaximo)
@@ -273,6 +277,7 @@ def menúOpciones():
     menuAyuda.add_command(label="Acerca de...")
 
 def nuevo(e):
+    primeraCasilla.set(True)
     if opcion.get() == 1:
         dificultadFacil()
     elif opcion.get() == 2:
@@ -325,11 +330,23 @@ def contarMinas(coord, xmax, ymax):
     return minas
 
 def comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo):
-    x = coord // xmax
-    y = coord % xmax
     if 0 <= coord <= tamaño-1 and listaBotones[coord].bind("<Button-1>"):
         if listaMinas[coord] == 1:
-            perder(coord)
+            if primeraCasilla.get() == True:
+                primeraCasilla.set(False)
+                control = True
+                while control:
+                    minaX = randint(0,xmax-1) 
+                    minaY = randint(0,ymax-1) 
+                    posicion = ymax*minaX + minaY
+                    if listaMinas[posicion] != 1:
+                        listaMinas[posicion] = 1
+                        control = False
+                listaMinas[coord] = 0
+                print(listaMinas)
+                comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo)
+            else:
+                perder(coord)
         else:
             listaBotones[coord].config(image=botonDeshabilitado)
             listaBotones[coord].unbind("<Button-1>")
@@ -426,7 +443,7 @@ def solucion():
 
 def ocultarSolucion():
     for i in range(len(listaMinas)):
-        if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage18":
+        if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage17":
             listaBotones[i].config(image=botonNormal)
     if vidas.get()==0:
         revelarTablero()
@@ -437,6 +454,7 @@ ventana.bind("<Control-Key-2>", lambda e: dificultadMedia())
 ventana.bind("<Control-Key-3>", lambda e: dificultadDificil())
 ventana.bind("<Control-Key-4>", lambda e: dificultadExtrema())
 ventana.bind("<F3>", lambda e: solucion())
+print(listaMinas)
 
 ventana.mainloop()
 
