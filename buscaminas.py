@@ -127,7 +127,7 @@ def dificultadPersonalizada(x, y, t, m):
     contadorBanderas.config(text=str(minasMaximo))
 
 def personalizar():
-    personalizar = Tk()
+    personalizar = Toplevel(ventana)
     personalizar.resizable(False, False)
     personalizar.title("Personalizar tablero")
     personalizar.geometry("500x200")
@@ -242,6 +242,25 @@ def revelarTablero():
             listaBotones[i].config(image=bombaError)
             listaBotones[i].unbind("<Button-1>")
 
+def ayuda():
+    ventanaAyuda = Toplevel(ventana)
+    ventanaAyuda.resizable = False
+    ventanaAyuda.geometry("400x400")
+    ventanaAyuda.title("Ayuda")
+    ventanaAyuda.attributes("-toolwindow", True, "-topmost", True)
+
+    titulo = Label(ventanaAyuda, text="Cómo jugar al buscaminas.")
+    titulo.place(x=20, y=20)
+    contenido = Message(ventanaAyuda, 
+                        text="""Al principio, tenemos un tablero formado por varias casillas, debajo de las cuales 
+                        hay ocultas un número determinado de minas. El juego consiste en destapar todas las 
+                        casillas que no tengan mina, dejando únicamente las que sí que la contengan. Para 
+                        destapar una casilla se tiene que hacer click con el botón izquierdo del ratón; 
+                        si la casilla contiene mina, se pierde la partida; si, por el contrario, la casilla no 
+                        tiene mina, se destapará haciendo, además, que si las casillas adyacentes tampoco tienen
+                        mina, se destapen también.""", width=350)
+    contenido.place(x=20, y=40)
+                        
 def menúOpciones():
     menuPrincipal = Menu(ventana, tearoff=0)
     ventana.config(menu=menuPrincipal)
@@ -273,7 +292,7 @@ def menúOpciones():
     menuOpciones.add_command(label="Pista", accelerator="F3", command=lambda: solucion())
     menuOpciones.add_command(label="Ver solución", command=lambda: revelarTablero())
 
-    menuAyuda.add_command(label="Ayuda")
+    menuAyuda.add_command(label="Ayuda", command=ayuda)
     menuAyuda.add_command(label="Acerca de...")
 
 def nuevo(e):
