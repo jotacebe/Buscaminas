@@ -55,3 +55,8 @@
   - Actualizado el archivo cambios.txt.
   - Otros cambios menores.
 
+10 de enero:
+  - Se han añadido dos imágenes nuevas que se usan para indicar las banderas que faltan por marcar y
+    el número de pistas que quedan.
+  - Se ha hecho que se muestre información sobre las pistas que quedan.
+  - Actualizado el archivo cambios.txt

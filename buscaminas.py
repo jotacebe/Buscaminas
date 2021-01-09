@@ -11,9 +11,7 @@
 #   - Documentar el código.
 #   - Añadir accesos para el teclado a más opciones del menú.
 #   - Añadir la posibilidad de cambiar las imágenes.
-#   - Mostrar información sobre las pistas disponibles en la ventana.
-#   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del 
-#     tablero.
+#   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.
 #################################################################################################
 
 from tkinter import *
@@ -23,19 +21,6 @@ from random import randint
 ventana = Tk()
 ventana.geometry("400x400")
 ventana.title("Buscaminas")
-#ventana.resizable(False, False)
-
-
-marcoBotones = Frame(ventana)
-marcoBotones.place(x=20, y=60)
-marcoBotones.config(border=2, bg="#DDDDDD")
-
-contadorBanderas = Label(ventana)
-contadorBanderas.place(x=20, y=20)
-
-temporizador = Label(ventana)
-temporizador.place(x=100, y=20)
-temporizador.config(text="0")
 
 botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif")
 bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif")
@@ -54,6 +39,8 @@ botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitad
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
 botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif")
 bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
+bombaFondo = PhotoImage(file="proyectos/buscaminas/img/bombaFondo.gif")
+bombilla = PhotoImage(file="proyectos/buscaminas/img/bombilla.gif")
 
 listaMinas = []
 listaBotones = []
@@ -73,6 +60,20 @@ primeraCasilla.set(True)
 personalizado = []
 tamañoPersonalizado = [3, 3, 0]
 
+marcoBotones = Frame(ventana)
+marcoBotones.place(x=20, y=60)
+marcoBotones.config(border=2, bg="#DDDDDD")
+
+#temporizador = Label(ventana)
+#temporizador.place(x=100, y=20)
+#temporizador.config(text="0")
+
+contadorBanderas = Label(ventana, font=("Sans Sherif", 14), image=bombaFondo, compound=LEFT)
+contadorBanderas.place(x=20, y=20)
+
+pistas = Label(ventana, font=("Sans Sherif", 14), image=bombilla, compound=LEFT)
+pistas.place(x=125, y=20)
+
 def dificultadFacil():
     xmax=10
     ymax=10
@@ -83,6 +84,7 @@ def dificultadFacil():
     vidas.set(4)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
+    pistas.config(text=vidas.get())
 
 def dificultadMedia():
     xmax=15
@@ -94,6 +96,7 @@ def dificultadMedia():
     ventana.geometry("430x500")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
+    pistas.config(text=vidas.get())
 
 def dificultadDificil():
     xmax=15 
@@ -105,6 +108,7 @@ def dificultadDificil():
     ventana.geometry("800x500")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
+    pistas.config(text=vidas.get())
 
 def dificultadExtrema():
     xmax=25 
@@ -116,6 +120,7 @@ def dificultadExtrema():
     ventana.geometry("680x710")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
+    pistas.config(text=vidas.get())
 
 def dificultadPersonalizada(x, y, t, m):
     xmax = x
@@ -125,6 +130,7 @@ def dificultadPersonalizada(x, y, t, m):
     vidas.set(5)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
+    pistas.config(text=vidas.get())
 
 def personalizar():
     personalizar = Toplevel(ventana)
@@ -251,15 +257,6 @@ def ayuda():
 
     titulo = Label(ventanaAyuda, text="Cómo jugar al buscaminas.")
     titulo.place(x=20, y=20)
-    contenido = Message(ventanaAyuda, 
-                        text="""Al principio, tenemos un tablero formado por varias casillas, debajo de las cuales 
-                        hay ocultas un número determinado de minas. El juego consiste en destapar todas las 
-                        casillas que no tengan mina, dejando únicamente las que sí que la contengan. Para 
-                        destapar una casilla se tiene que hacer click con el botón izquierdo del ratón; 
-                        si la casilla contiene mina, se pierde la partida; si, por el contrario, la casilla no 
-                        tiene mina, se destapará haciendo, además, que si las casillas adyacentes tampoco tienen
-                        mina, se destapen también.""", width=350)
-    contenido.place(x=20, y=40)
                         
 def menúOpciones():
     menuPrincipal = Menu(ventana, tearoff=0)
@@ -454,7 +451,6 @@ dificultadFacil()
 menúOpciones()
 
 def solucion():
-    vidas.set(vidas.get()-1)
     for i in range(len(listaMinas)):
         if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1":
             listaBotones[i].config(image=bombaFantasma)
@@ -466,6 +462,9 @@ def ocultarSolucion():
             listaBotones[i].config(image=botonNormal)
     if vidas.get()==0:
         revelarTablero()
+    vidas.set(vidas.get()-1)
+    if vidas.get() >= 0:
+        pistas.config(text=vidas.get())
 
 ventana.bind("<F2>", nuevo)
 ventana.bind("<Control-Key-1>", lambda e: dificultadFacil())
