@@ -60,3 +60,14 @@
     el número de pistas que quedan.
   - Se ha hecho que se muestre información sobre las pistas que quedan.
   - Actualizado el archivo cambios.txt
+
+11 de enero:
+  - Ahora se muestra información sobre la proporción minas/casilla en la ventana de personalización.
+  - Se ha modificado la imagen de la bombilla.
+  - Corrección de errores.
+  - Actualizado el archivo cambios.txt
+  - Otros cambios menores.
+
+18 de enero:
+  - Cambios menores.
+  - Actualizado el archivo cambios.txt

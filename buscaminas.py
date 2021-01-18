@@ -62,7 +62,7 @@ tamañoPersonalizado = [3, 3, 0]
 
 marcoBotones = Frame(ventana)
 marcoBotones.place(x=20, y=60)
-marcoBotones.config(border=2, bg="#DDDDDD")
+marcoBotones.config(border=3, bg="#DDDDDD", relief=RIDGE)
 
 #temporizador = Label(ventana)
 #temporizador.place(x=100, y=20)
@@ -114,7 +114,7 @@ def dificultadExtrema():
     xmax=25 
     ymax=25 
     tamaño = 625 
-    minasMaximo = 250 
+    minasMaximo = 200 
     opcion.set(4) 
     vidas.set(11)
     ventana.geometry("680x710")
@@ -142,6 +142,11 @@ def personalizar():
     marco = Frame(personalizar)
     marco.place(x=20, y=20)
 
+    textoProporcion = Label(personalizar)
+    textoProporcion.place(x=20, y=120)
+
+    primeraCasilla.set(True)
+    
     def valor(e):
         tamañoPersonalizado[0] = cuadrosVertical.get()
         tamañoPersonalizado[1] = cuadrosHorizontal.get()
@@ -150,7 +155,9 @@ def personalizar():
         textoHorizontal.config(text=cuadrosHorizontal.get())
         textoMinas.config(text=minas.get())
         minas.config(to_=tamañoPersonalizado[0]*tamañoPersonalizado[1]-1)
-        
+        proporcion = float(minas.get() / (cuadrosVertical.get() * cuadrosHorizontal.get()))
+        textoProporcion.config(text="La proporción actual es de {:.3f} minas por casilla.".format(proporcion))
+       
     texto1 = Label(marco, text="Cuadros en vertical: ", width=17, anchor="e", justify=LEFT).grid(row=0, column=0)
     texto2 = Label(marco, text="Cuadros en horizontal: ", width=17, anchor="e", justify=LEFT).grid(row=1, column=0)
     texto3 = Label(marco, text="Número de minas: ", width=17, anchor="e", justify=LEFT).grid(row=2, column=0)
@@ -165,7 +172,7 @@ def personalizar():
     cuadrosVertical.set(tamañoPersonalizado[0])
     cuadrosHorizontal.set(tamañoPersonalizado[1])
     minas.set(tamañoPersonalizado[2])
-   
+ 
     textoVertical = Label(marco, text="3", width=3, anchor="e", justify=LEFT, bg="#CCCCCC", bd=1, relief=SUNKEN)
     textoVertical.grid(row=0, column=3)
     textoHorizontal = Label(marco, text="3", width=3, anchor="e", justify=LEFT, bg="#CCCCCC", bd=1, relief=SUNKEN)
@@ -349,7 +356,6 @@ def comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo):
     if 0 <= coord <= tamaño-1 and listaBotones[coord].bind("<Button-1>"):
         if listaMinas[coord] == 1:
             if primeraCasilla.get() == True:
-                primeraCasilla.set(False)
                 control = True
                 while control:
                     minaX = randint(0,xmax-1) 
@@ -359,11 +365,11 @@ def comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo):
                         listaMinas[posicion] = 1
                         control = False
                 listaMinas[coord] = 0
-                print(listaMinas)
                 comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo)
             else:
                 perder(coord)
         else:
+            primeraCasilla.set(False)
             listaBotones[coord].config(image=botonDeshabilitado)
             listaBotones[coord].unbind("<Button-1>")
             minasAdyacentes = contarMinas(coord, xmax, ymax)
