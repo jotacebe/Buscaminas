@@ -311,6 +311,7 @@ def nuevo(e):
         dificultadExtrema()
     else:
         dificultadPersonalizada(personalizado[0], personalizado[1], personalizado[2], personalizado[3])
+    reiniciar.place(x=-50, y=-50)
     
 def calcularAdyacentes(coord, xmax, ymax):   
     adyacentes = [] 
@@ -391,10 +392,12 @@ def perder(coord):
     listaBotones[coord].unbind("<Button-1>")
     revelarTablero()
     #msg.showinfo(message="Has perdido")
+    reiniciar.place(x=50, y=20)
 
 def ganar():
     revelarTablero()
     #msg.showinfo(message="Has ganado")
+    reiniciar.place(x=50, y=20)
 
 def colocarMinas(xmax, ymax, tamaño, minasMaximo):
     listaMinas.clear()
@@ -471,6 +474,9 @@ def ocultarSolucion():
     vidas.set(vidas.get()-1)
     if vidas.get() >= 0:
         pistas.config(text=vidas.get())
+
+reiniciar = Button(ventana, text="Nuevo", command=lambda e: nuevo())
+reiniciar.place(x=-50, y=-50)
 
 ventana.bind("<F2>", nuevo)
 ventana.bind("<Control-Key-1>", lambda e: dificultadFacil())
