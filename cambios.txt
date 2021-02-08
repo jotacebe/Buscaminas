@@ -71,3 +71,9 @@
 18 de enero:
   - Cambios menores.
   - Actualizado el archivo cambios.txt
+
+8 de febrero:
+  - Se ha añadido al menú la opción para cambiar las imágenes.
+  - Se ha quitado del menú la opción para pausar la partida.
+  - Actualizada la lista de Cosas pendientes.
+  - Actualizado el archivo cambios.txt

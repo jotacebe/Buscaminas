@@ -1,18 +1,13 @@
-#################################################################################################
+###########################################################################################################
 #     COSAS PENDIENTES DE HACER
-#	- Opción del menú Juego - Pausa
-#	- Opción del menú Ayuda - Ayuda
-#	- Opción del menú Ayuda - Acerca de...
-#	- Habilitar contador de tiempo.
-#	- Añadir a la ventana información sobre el tiempo.
-#	- Añadir a la ventana boton para Iniciar/Reiniciar.
-#	- Añadir lista de mejores resultados.
-#   - Añadir mensajes para cuando se gana o se pierde.
+#	- Terminar la ventana de Ayuda
+#	- Hacer la ventana Acerca de...
+#   - Terminar el boton Nuevo
+#	- Añadir mensajes para cuando se gana o se pierde.
 #   - Documentar el código.
-#   - Añadir accesos para el teclado a más opciones del menú.
-#   - Añadir la posibilidad de cambiar las imágenes.
-#   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.
-#################################################################################################
+#   - Añadir la posibilidad de cambiar las imágenes.                                                        
+#   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.  
+###########################################################################################################
 
 from tkinter import *
 from tkinter import messagebox as msg
@@ -48,6 +43,8 @@ listaAdyacentes = []
 listaNumeros = ["pyimage6", "pyimage7", "pyimage8", "pyimage9", "pyimage10", "pyimage11", "pyimage12", "pyimage13"]
 
 opcion = IntVar()
+opImagen = IntVar()
+opImagen.set(1)
 menuAdyacentes = BooleanVar()
 menuAdyacentes.set(False)
 vidas = IntVar()
@@ -63,10 +60,6 @@ tamañoPersonalizado = [3, 3, 0]
 marcoBotones = Frame(ventana)
 marcoBotones.place(x=20, y=60)
 marcoBotones.config(border=3, bg="#DDDDDD", relief=RIDGE)
-
-#temporizador = Label(ventana)
-#temporizador.place(x=100, y=20)
-#temporizador.config(text="0")
 
 contadorBanderas = Label(ventana, font=("Sans Sherif", 14), image=bombaFondo, compound=LEFT)
 contadorBanderas.place(x=20, y=20)
@@ -260,7 +253,7 @@ def ayuda():
     ventanaAyuda.resizable = False
     ventanaAyuda.geometry("400x400")
     ventanaAyuda.title("Ayuda")
-    ventanaAyuda.attributes("-toolwindow", True, "-topmost", True)
+    ventanaAyuda.attributes("-topmost", True)
 
     titulo = Label(ventanaAyuda, text="Cómo jugar al buscaminas.")
     titulo.place(x=20, y=20)
@@ -273,6 +266,7 @@ def menúOpciones():
     menuOpciones = Menu(menuPrincipal, tearoff=0)
     menuAyuda = Menu(menuPrincipal, tearoff=0)
     menuDificultad = Menu(menuJuego, tearoff=0)
+    menuImagenes = Menu(menuJuego, tearoff=0)
 
     menuPrincipal.add_cascade(label="Juego", menu=menuJuego)
     menuPrincipal.add_cascade(label="Opciones", menu=menuOpciones)
@@ -285,21 +279,24 @@ def menúOpciones():
     menuDificultad.add_separator()
     menuDificultad.add_radiobutton(label="Personalizado...", variable=opcion, value=5, command=personalizar)
 
+    menuImagenes.add_radiobutton(label="Minas", variable=opImagen, value=1)
+    menuImagenes.add_radiobutton(label="Gatos", variable=opImagen, value=2)
+    menuImagenes.add_radiobutton(label="Flores", variable=opImagen, value=3)
+
     menuJuego.add_command(label="Nuevo", accelerator="F2", command=lambda: nuevo())
-    menuJuego.add_command(label="Pausa", accelerator="P")
     menuJuego.add_cascade(label="Dificultad", menu=menuDificultad)
     menuJuego.add_separator()
     menuJuego.add_command(label="Salir", command=lambda: ventana.quit())
 
     menuOpciones.add_checkbutton(label="Adyacentes", onvalue=1, offvalue=0, variable=menuAdyacentes)
-    menuOpciones.add_separator()
+    menuOpciones.add_cascade(label="Imágenes", menu=menuImagenes)
     menuOpciones.add_command(label="Pista", accelerator="F3", command=lambda: solucion())
-    menuOpciones.add_command(label="Ver solución", command=lambda: revelarTablero())
+    menuOpciones.add_command(label="Ver solución", command=lambda: revelarTablero(), accelerator="CTRL + R")
 
-    menuAyuda.add_command(label="Ayuda", command=ayuda)
+    menuAyuda.add_command(label="Ayuda", command=ayuda, accelerator="F1")
     menuAyuda.add_command(label="Acerca de...")
 
-def nuevo(e):
+def nuevo():
     primeraCasilla.set(True)
     if opcion.get() == 1:
         dificultadFacil()
@@ -456,9 +453,6 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
                 i += 1 
     colocarMinas(xmax, ymax, tamaño, minasMaximo)
 
-dificultadFacil()
-menúOpciones()
-
 def solucion():
     for i in range(len(listaMinas)):
         if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1":
@@ -475,16 +469,21 @@ def ocultarSolucion():
     if vidas.get() >= 0:
         pistas.config(text=vidas.get())
 
-reiniciar = Button(ventana, text="Nuevo", command=lambda e: nuevo())
+reiniciar = Button(ventana, text="Nuevo", command=nuevo)
 reiniciar.place(x=-50, y=-50)
 
-ventana.bind("<F2>", nuevo)
+dificultadFacil()
+menúOpciones()
+
+ventana.bind("<F1>", lambda e: ayuda())
+ventana.bind("<F2>", lambda e: nuevo())
+ventana.bind("<F3>", lambda e: solucion())
 ventana.bind("<Control-Key-1>", lambda e: dificultadFacil())
 ventana.bind("<Control-Key-2>", lambda e: dificultadMedia())
 ventana.bind("<Control-Key-3>", lambda e: dificultadDificil())
 ventana.bind("<Control-Key-4>", lambda e: dificultadExtrema())
-ventana.bind("<F3>", lambda e: solucion())
-print(listaMinas)
+ventana.bind("<Control-Key-r>", lambda e: revelarTablero())
+ventana.bind("<Control-Key-R>", lambda e: revelarTablero())
 
 ventana.mainloop()
 
