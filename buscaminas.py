@@ -1,12 +1,11 @@
 ###########################################################################################################
 #     COSAS PENDIENTES DE HACER
-#	- Terminar la ventana de Ayuda
-#	- Hacer la ventana Acerca de...
-#   - Terminar el boton Nuevo
-#	- Añadir mensajes para cuando se gana o se pierde.
-#   - Documentar el código.
-#   - Añadir la posibilidad de cambiar las imágenes.                                                        
-#   - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.  
+#	    - Terminar la ventana de Ayuda
+#	    - Hacer la ventana Acerca de...
+#       - Terminar el boton Nuevo
+#	    - Añadir mensajes para cuando se gana o se pierde.
+#       - Documentar el código.
+#       - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.  
 ###########################################################################################################
 
 from tkinter import *
@@ -17,30 +16,50 @@ ventana = Tk()
 ventana.geometry("400x400")
 ventana.title("Buscaminas")
 
-botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif")
-bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif")
+botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif") #1
+bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif") #2
 bombaNormal = PhotoImage(file="proyectos/buscaminas/img/bombaNormal.gif")
 bombaError = PhotoImage(file="proyectos/buscaminas/img/bombaError.gif")
-bombaExplota = PhotoImage(file="proyectos/buscaminas/img/bombaExplota.gif")
+bombaExplota = PhotoImage(file="proyectos/buscaminas/img/bombaExplota.gif") #5
+bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
+bombaFondo = PhotoImage(file="proyectos/buscaminas/img/bombaFondo.gif")
 numero1 = PhotoImage(file="proyectos/buscaminas/img/numero1.gif")
 numero2 = PhotoImage(file="proyectos/buscaminas/img/numero2.gif")
-numero3 = PhotoImage(file="proyectos/buscaminas/img/numero3.gif")
+numero3 = PhotoImage(file="proyectos/buscaminas/img/numero3.gif") #10
 numero4 = PhotoImage(file="proyectos/buscaminas/img/numero4.gif")
 numero5 = PhotoImage(file="proyectos/buscaminas/img/numero5.gif")
 numero6 = PhotoImage(file="proyectos/buscaminas/img/numero6.gif")
 numero7 = PhotoImage(file="proyectos/buscaminas/img/numero7.gif")
-numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif")
+numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif") #15
 botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
-botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif")
-bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
-bombaFondo = PhotoImage(file="proyectos/buscaminas/img/bombaFondo.gif")
+botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif") #18
 bombilla = PhotoImage(file="proyectos/buscaminas/img/bombilla.gif")
+gatoBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalGato.gif") #20
+gatoNormal = PhotoImage(file="proyectos/buscaminas/img/gatoNormal.gif")
+gatoError = PhotoImage(file="proyectos/buscaminas/img/gatoError.gif")
+gatoExplota = PhotoImage(file="proyectos/buscaminas/img/gatoExplota.gif")
+gatoFantasma = PhotoImage(file="proyectos/buscaminas/img/gatoFantasma.gif") #24
+banderaGato = PhotoImage(file="proyectos/buscaminas/img/banderaGato.gif") #25
+gatoFondo = PhotoImage(file="proyectos/buscaminas/img/gatoFondo.gif")
+florBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalFlor.gif") #27
+florNormal = PhotoImage(file="proyectos/buscaminas/img/florNormal.gif")
+florError = PhotoImage(file="proyectos/buscaminas/img/florError.gif")
+florExplota = PhotoImage(file="proyectos/buscaminas/img/florExplota.gif")
+florFantasma = PhotoImage(file="proyectos/buscaminas/img/florFantasma.gif") #31
+florFondo = PhotoImage(file="proyectos/buscaminas/img/florFondo.gif")
+banderaFlor = PhotoImage(file="proyectos/buscaminas/img/banderaFlor.gif") #33
 
 listaMinas = []
 listaBotones = []
 listaAdyacentes = []
-listaNumeros = ["pyimage6", "pyimage7", "pyimage8", "pyimage9", "pyimage10", "pyimage11", "pyimage12", "pyimage13"]
+listaNumeros = ["pyimage8", "pyimage9", "pyimage10", "pyimage11", "pyimage12", "pyimage13", "pyimage14", "pyimage15"]
+listaBanderas = ["pyimage2", "pyimage25", "pyimage33"]
+listaFondo = ["pyimage1", "pyimage20", "pyimage27"]
+listaPistas = ["pyimage6", "pyimage24", "pyimage31"]
+listaIconos = ["pyimage3", "pyimage21", "pyimage28"]
+listaExplota = ["pyimage5", "pyimage23", "pyimage30"]
+listaError = ["pyimage4", "pyimage22", "pyimage29"]
 
 opcion = IntVar()
 opImagen = IntVar()
@@ -65,7 +84,48 @@ contadorBanderas = Label(ventana, font=("Sans Sherif", 14), image=bombaFondo, co
 contadorBanderas.place(x=20, y=20)
 
 pistas = Label(ventana, font=("Sans Sherif", 14), image=bombilla, compound=LEFT)
-pistas.place(x=125, y=20)
+pistas.place(x=220, y=20)
+
+def cambiarImagen():
+    if opImagen.get() == 1:
+        contadorBanderas.config(image=bombaFondo)
+        for i in range(len(listaBotones)):
+            if listaBotones[i].cget("image") in listaFondo:
+                listaBotones[i].config(image=botonNormal)
+            elif listaBotones[i].cget("image") in listaBanderas:
+                listaBotones[i].config(image=bandera)
+            elif listaBotones[i].cget("image") in listaIconos:
+                listaBotones[i].config(image=bombaNormal)
+            elif listaBotones[i].cget("image") in listaExplota:
+                listaBotones[i].config(image=bombaExplota)
+            elif listaBotones[i].cget("image") in listaError:
+                listaBotones[i].config(image=bombaError)
+    if opImagen.get() == 2:
+        contadorBanderas.config(image=gatoFondo)
+        for i in range(len(listaBotones)):
+            if listaBotones[i].cget("image") in listaFondo:
+                listaBotones[i].config(image=gatoBase)
+            elif listaBotones[i].cget("image") in listaBanderas:
+                listaBotones[i].config(image=banderaGato)
+            elif listaBotones[i].cget("image") in listaIconos:
+                listaBotones[i].config(image=gatoNormal)
+            elif listaBotones[i].cget("image") in listaExplota:
+                listaBotones[i].config(image=gatoExplota)
+            elif listaBotones[i].cget("image") in listaError:
+                listaBotones[i].config(image=gatoError)
+    if opImagen.get() == 3:
+        contadorBanderas.config(image=florFondo)
+        for i in range(len(listaBotones)):
+            if listaBotones[i].cget("image") in listaFondo:
+                listaBotones[i].config(image=florBase)
+            elif listaBotones[i].cget("image") in listaBanderas:
+                listaBotones[i].config(image=banderaFlor)
+            elif listaBotones[i].cget("image") in listaIconos:
+                listaBotones[i].config(image=florNormal)
+            elif listaBotones[i].cget("image") in listaExplota:
+                listaBotones[i].config(image=florExplota)
+            elif listaBotones[i].cget("image") in listaError:
+                listaBotones[i].config(image=florError)
 
 def dificultadFacil():
     xmax=10
@@ -209,7 +269,7 @@ def contarBanderas(coord, xmax, ymax):
     banderas = 0
     adyacentes = calcularAdyacentes(coord, xmax, ymax)
     for i in adyacentes:
-        if listaBotones[i].cget("image") == "pyimage2": 
+        if listaBotones[i].cget("image") in listaBanderas: 
             banderas += 1
     return banderas
 
@@ -218,9 +278,9 @@ def verAdyacentes(e, coord, xmax, ymax):
         listaAdyacentes.clear()
         adyacentes = calcularAdyacentes(coord, xmax, ymax)   
         for i in adyacentes:
-            if listaBotones[i].cget("image")=="pyimage1" or listaBotones[i].cget("image")=="pyimage2":
+            if listaBotones[i].cget("image") in listaFondo or listaBotones[i].cget("image") in listaBanderas:
                 listaAdyacentes.append(listaBotones[i])
-                if listaBotones[i].cget("image") == "pyimage1":
+                if listaBotones[i].cget("image") in listaFondo:
                     listaBotones[i].config(image=botonPista)
 
 def ocultarAdyacentes(e, coord, xmax, ymax, tamaño, minasMaximo):
@@ -228,24 +288,40 @@ def ocultarAdyacentes(e, coord, xmax, ymax, tamaño, minasMaximo):
     banderas = contarBanderas(coord, xmax, ymax)
     adyacentes = calcularAdyacentes(coord, xmax, ymax)
     for i in adyacentes:
-        if listaBotones[i].cget("image") == "pyimage16":
-            listaBotones[i].config(image=botonNormal)
+        if listaBotones[i].cget("image") == "pyimage18":
+            if opImagen.get() == 1:
+                listaBotones[i].config(image=botonNormal)
+            elif opImagen.get() == 2:
+                listaBotones[i].config(image=gatoBase)
+            elif opImagen.get() == 3:
+                listaBotones[i].config(image=florBase)
             if minas == banderas:
                 comprobarMinas(i, xmax, ymax, tamaño, minasMaximo)
                  
 def revelarTablero():
     for i in range(len(listaBotones)):
-        if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1": 
-            listaBotones[i].config(image=bombaNormal)
+        if listaMinas[i] == 1 and listaBotones[i].cget("image") in listaFondo:
+            if opImagen.get() == 1:
+                listaBotones[i].config(image=bombaNormal)
+            elif opImagen.get() == 2:
+                listaBotones[i].config(image=gatoNormal)
+            elif opImagen.get() == 3:
+                listaBotones[i].config(image=florNormal)
             listaBotones[i].unbind("<Button-1>")
-        elif listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage2":
+        elif listaMinas[i] == 1 and listaBotones[i].cget("image") in listaBanderas:
             listaBotones[i].config(image=banderaDeshabilitada)
             listaBotones[i].unbind("<Button-1>")
-        elif listaMinas[i] == 0 and listaBotones[i].cget("image") == "pyimage1":
+            listaBotones[i].unbind("<Button-3>")
+        elif listaMinas[i] == 0 and listaBotones[i].cget("image") in listaFondo:
             listaBotones[i].config(image=botonDeshabilitado)
             listaBotones[i].unbind("<Button-1>")
-        elif listaMinas[i] == 0 and  listaBotones[i].cget("image") == "pyimage2":
-            listaBotones[i].config(image=bombaError)
+        elif listaMinas[i] == 0 and  listaBotones[i].cget("image") in listaBanderas:
+            if opImagen.get() == 1:
+                listaBotones[i].config(image=bombaError)
+            elif opImagen.get() == 2:
+                listaBotones[i].config(image=gatoError)
+            elif opImagen.get() == 3:
+                listaBotones[i].config(image=florError)
             listaBotones[i].unbind("<Button-1>")
 
 def ayuda():
@@ -279,9 +355,9 @@ def menúOpciones():
     menuDificultad.add_separator()
     menuDificultad.add_radiobutton(label="Personalizado...", variable=opcion, value=5, command=personalizar)
 
-    menuImagenes.add_radiobutton(label="Minas", variable=opImagen, value=1)
-    menuImagenes.add_radiobutton(label="Gatos", variable=opImagen, value=2)
-    menuImagenes.add_radiobutton(label="Flores", variable=opImagen, value=3)
+    menuImagenes.add_radiobutton(label="Minas", variable=opImagen, value=1, command=lambda: cambiarImagen())
+    menuImagenes.add_radiobutton(label="Gatos", variable=opImagen, value=2, command=lambda: cambiarImagen())
+    menuImagenes.add_radiobutton(label="Flores", variable=opImagen, value=3, command=lambda: cambiarImagen())
 
     menuJuego.add_command(label="Nuevo", accelerator="F2", command=lambda: nuevo())
     menuJuego.add_cascade(label="Dificultad", menu=menuDificultad)
@@ -385,11 +461,16 @@ def comprobarMinas(coord, xmax, ymax, tamaño, minasMaximo):
                 listaBotones[coord].bind("<ButtonRelease-1>", lambda e, c=coord, x=xmax, y=ymax, t=tamaño, m=minasMaximo: ocultarAdyacentes(e, c, x, y, t, m))
 
 def perder(coord):
-    listaBotones[coord].config(image=bombaExplota)
+    if opImagen.get() == 1:
+        listaBotones[coord].config(image=bombaExplota)
+    elif opImagen.get() == 2:
+        listaBotones[coord].config(image=gatoExplota)
+    elif opImagen.get() == 3:
+        listaBotones[coord].config(image=florExplota)
     listaBotones[coord].unbind("<Button-1>")
     revelarTablero()
     #msg.showinfo(message="Has perdido")
-    reiniciar.place(x=50, y=20)
+    reiniciar.place(x=120, y=20)
 
 def ganar():
     revelarTablero()
@@ -409,14 +490,24 @@ def colocarMinas(xmax, ymax, tamaño, minasMaximo):
         if listaMinas[posicion] != 1:
             listaMinas[posicion] = 1
             num += 1
-
+            
 def ponerBandera(e, coord, xmax, ymax, tamaño, minasMaximo):
-    if listaBotones[coord].cget("image") == "pyimage2":
-        listaBotones[coord].config(image=botonNormal)
+    if listaBotones[coord].cget("image") in listaBanderas:
+        if opImagen.get() == 1:
+            listaBotones[coord].config(image=botonNormal)
+        elif opImagen.get() == 2:
+            listaBotones[coord].config(image=gatoBase)
+        elif opImagen.get() == 3:
+            listaBotones[coord].config(image=florBase)
         contadorBanderas.config(text=str(int(contadorBanderas.cget("text"))+1))
         listaBotones[coord].bind("<Button-1>", lambda e, c=coord, t=tamaño, x=xmax, y=ymax, m=minasMaximo: comprobarMinas(c, x, y, t, m))
-    elif listaBotones[coord].cget("image") == "pyimage1": 
-        listaBotones[coord].config(image=bandera)
+    elif listaBotones[coord].cget("image") in listaFondo:
+        if opImagen.get() == 1:
+            listaBotones[coord].config(image=bandera)
+        elif opImagen.get() == 2:
+            listaBotones[coord].config(image=banderaGato)
+        elif opImagen.get() == 3:
+            listaBotones[coord].config(image=banderaFlor)
         contadorBanderas.config(text=str(int(contadorBanderas.cget("text"))-1))
         listaBotones[coord].unbind("<Button-1>")
             
@@ -424,11 +515,11 @@ def comprobarSiGanar(minasMaximo, tamaño):
     contarNormal = 0
     mina = 0
     for i in range(tamaño):
-        if listaBotones[i].cget("image") == "pyimage1" or listaBotones[i].cget("image") == "pyimage2":
+        if listaBotones[i].cget("image") in listaFondo or listaBotones[i].cget("image") in listaBanderas:
             contarNormal += 1
     if contarNormal == minasMaximo:
         for i in range(tamaño):
-            if listaBotones[i].cget("image") == "pyimage1" or listaBotones[i].cget("image") == "pyimage2" and listaMinas[i] == 1:
+            if listaBotones[i].cget("image") in listaFondo or listaBotones[i].cget("image") in listaBanderas and listaMinas[i] == 1:
                 mina += 1
     if mina == minasMaximo:          
         return True
@@ -436,6 +527,12 @@ def comprobarSiGanar(minasMaximo, tamaño):
         return False
 
 def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
+    if opImagen.get() == 1:
+        fondo = botonNormal
+    elif opImagen.get() == 2:
+        fondo = gatoBase
+    elif opImagen.get() == 3:
+        fondo = florBase
     for i in listaBotones:
         i.destroy()
     listaBotones.clear()
@@ -445,7 +542,7 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
             for k in range(ymax):
                 nombreBoton = str(i)
                 texto = str(ymax*j + k)
-                nombreBoton = Label(marcoBotones, image=botonNormal, border=0)  
+                nombreBoton = Label(marcoBotones, image=fondo, border=0)  
                 nombreBoton.grid(row=j, column=k)
                 nombreBoton.bind("<Button-3>", lambda e, c=int(texto), t=tamaño, x=xmax, y=ymax, m=minasMaximo: ponerBandera(e, c, x, y, t, m))
                 nombreBoton.bind("<Button-1>", lambda e, c=int(texto), t=tamaño, x=xmax, y=ymax, m=minasMaximo: comprobarMinas(c, x, y, t, m))
@@ -455,14 +552,24 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
 
 def solucion():
     for i in range(len(listaMinas)):
-        if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage1":
-            listaBotones[i].config(image=bombaFantasma)
-    ventana.after(50, ocultarSolucion)    
+        if listaMinas[i] == 1 and listaBotones[i].cget("image") in listaFondo:
+            if opImagen.get() == 1:
+                listaBotones[i].config(image=bombaFantasma)
+            elif opImagen.get() == 2:
+                listaBotones[i].config(image=gatoFantasma)
+            elif opImagen.get() == 3:
+                listaBotones[i].config(image=florFantasma)           
+    ventana.after(100, ocultarSolucion)    
 
 def ocultarSolucion():
     for i in range(len(listaMinas)):
-        if listaMinas[i] == 1 and listaBotones[i].cget("image") == "pyimage17":
-            listaBotones[i].config(image=botonNormal)
+        if listaMinas[i] == 1 and listaBotones[i].cget("image") in listaPistas:
+            if opImagen.get() == 1:
+                listaBotones[i].config(image=botonNormal)
+            elif opImagen.get() == 2:
+                listaBotones[i].config(image=gatoBase)
+            elif opImagen.get() == 3:
+                listaBotones[i].config(image=florBase)
     if vidas.get()==0:
         revelarTablero()
     vidas.set(vidas.get()-1)
@@ -470,7 +577,7 @@ def ocultarSolucion():
         pistas.config(text=vidas.get())
 
 reiniciar = Button(ventana, text="Nuevo", command=nuevo)
-reiniciar.place(x=-50, y=-50)
+reiniciar.place(x=-200, y=-200)
 
 dificultadFacil()
 menúOpciones()

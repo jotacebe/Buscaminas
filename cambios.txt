@@ -77,3 +77,9 @@
   - Se ha quitado del menú la opción para pausar la partida.
   - Actualizada la lista de Cosas pendientes.
   - Actualizado el archivo cambios.txt
+
+9 de febrero:
+  - Añadidas imágenes a la carpeta imagen
+  - Añadida la posibilidad de cambiar las imágenes.
+  - Actualizado el archivo cambios.txt
+  - Otros cambios menores.
