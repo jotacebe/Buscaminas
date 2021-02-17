@@ -83,3 +83,8 @@
   - Añadida la posibilidad de cambiar las imágenes.
   - Actualizado el archivo cambios.txt
   - Otros cambios menores.
+
+16 de febrero:
+  - Completada la ventana de Ayuda.
+  - Actualizado la lista de Cosas pendientes
+  - Actualizado el archivo cambios.txt

@@ -1,9 +1,8 @@
 ###########################################################################################################
 #     COSAS PENDIENTES DE HACER
-#	    - Terminar la ventana de Ayuda
 #	    - Hacer la ventana Acerca de...
 #       - Terminar el boton Nuevo
-#	    - Añadir mensajes para cuando se gana o se pierde.
+#	    - Cambiar el icono de la ventana del juego.
 #       - Documentar el código.
 #       - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.  
 ###########################################################################################################
@@ -16,39 +15,40 @@ ventana = Tk()
 ventana.geometry("400x400")
 ventana.title("Buscaminas")
 
-botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif") #1
-bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif") #2
+botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif") 
+bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif") 
 bombaNormal = PhotoImage(file="proyectos/buscaminas/img/bombaNormal.gif")
 bombaError = PhotoImage(file="proyectos/buscaminas/img/bombaError.gif")
-bombaExplota = PhotoImage(file="proyectos/buscaminas/img/bombaExplota.gif") #5
+bombaExplota = PhotoImage(file="proyectos/buscaminas/img/bombaExplota.gif") 
 bombaFantasma = PhotoImage(file="proyectos/buscaminas/img/bombaFantasma.gif")
 bombaFondo = PhotoImage(file="proyectos/buscaminas/img/bombaFondo.gif")
 numero1 = PhotoImage(file="proyectos/buscaminas/img/numero1.gif")
 numero2 = PhotoImage(file="proyectos/buscaminas/img/numero2.gif")
-numero3 = PhotoImage(file="proyectos/buscaminas/img/numero3.gif") #10
+numero3 = PhotoImage(file="proyectos/buscaminas/img/numero3.gif") 
 numero4 = PhotoImage(file="proyectos/buscaminas/img/numero4.gif")
 numero5 = PhotoImage(file="proyectos/buscaminas/img/numero5.gif")
 numero6 = PhotoImage(file="proyectos/buscaminas/img/numero6.gif")
 numero7 = PhotoImage(file="proyectos/buscaminas/img/numero7.gif")
-numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif") #15
+numero8 = PhotoImage(file="proyectos/buscaminas/img/numero8.gif") 
 botonDeshabilitado = PhotoImage(file="proyectos/buscaminas/img/botonDeshabilitado.gif")
 banderaDeshabilitada = PhotoImage(file="proyectos/buscaminas/img/banderaDeshabilitada.gif")
-botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif") #18
+botonPista = PhotoImage(file="proyectos/buscaminas/img/botonPista.gif")
 bombilla = PhotoImage(file="proyectos/buscaminas/img/bombilla.gif")
-gatoBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalGato.gif") #20
+gatoBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalGato.gif")
 gatoNormal = PhotoImage(file="proyectos/buscaminas/img/gatoNormal.gif")
 gatoError = PhotoImage(file="proyectos/buscaminas/img/gatoError.gif")
 gatoExplota = PhotoImage(file="proyectos/buscaminas/img/gatoExplota.gif")
-gatoFantasma = PhotoImage(file="proyectos/buscaminas/img/gatoFantasma.gif") #24
-banderaGato = PhotoImage(file="proyectos/buscaminas/img/banderaGato.gif") #25
+gatoFantasma = PhotoImage(file="proyectos/buscaminas/img/gatoFantasma.gif")
+banderaGato = PhotoImage(file="proyectos/buscaminas/img/banderaGato.gif") 
 gatoFondo = PhotoImage(file="proyectos/buscaminas/img/gatoFondo.gif")
-florBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalFlor.gif") #27
+florBase = PhotoImage(file="proyectos/buscaminas/img/botonNormalFlor.gif") 
 florNormal = PhotoImage(file="proyectos/buscaminas/img/florNormal.gif")
 florError = PhotoImage(file="proyectos/buscaminas/img/florError.gif")
 florExplota = PhotoImage(file="proyectos/buscaminas/img/florExplota.gif")
-florFantasma = PhotoImage(file="proyectos/buscaminas/img/florFantasma.gif") #31
+florFantasma = PhotoImage(file="proyectos/buscaminas/img/florFantasma.gif") 
 florFondo = PhotoImage(file="proyectos/buscaminas/img/florFondo.gif")
-banderaFlor = PhotoImage(file="proyectos/buscaminas/img/banderaFlor.gif") #33
+banderaFlor = PhotoImage(file="proyectos/buscaminas/img/banderaFlor.gif")
+ayudaImagen = PhotoImage(file="proyectos/buscaminas/img/ayuda.gif")
 
 listaMinas = []
 listaBotones = []
@@ -134,7 +134,7 @@ def dificultadFacil():
     minasMaximo = 10
     ventana.geometry("300x350")    
     opcion.set(1)
-    vidas.set(4)
+    vidas.set(3)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
@@ -169,7 +169,7 @@ def dificultadExtrema():
     tamaño = 625 
     minasMaximo = 200 
     opcion.set(4) 
-    vidas.set(11)
+    vidas.set(10)
     ventana.geometry("680x710")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
@@ -180,7 +180,7 @@ def dificultadPersonalizada(x, y, t, m):
     ymax = y
     tamaño = t
     minasMaximo = m
-    vidas.set(5)
+    vidas.set(minasMaximo//5)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
@@ -327,12 +327,13 @@ def revelarTablero():
 def ayuda():
     ventanaAyuda = Toplevel(ventana)
     ventanaAyuda.resizable = False
-    ventanaAyuda.geometry("400x400")
+    ventanaAyuda.geometry("900x550")
     ventanaAyuda.title("Ayuda")
-    ventanaAyuda.attributes("-topmost", True)
+    ventanaAyuda.attributes("-topmost", True, "-toolwindow", True)
 
-    titulo = Label(ventanaAyuda, text="Cómo jugar al buscaminas.")
-    titulo.place(x=20, y=20)
+    imagenAyuda = Label(ventanaAyuda, image=ayudaImagen).pack()
+    salir = Button(ventanaAyuda, text="Salir", command=lambda: ventanaAyuda.destroy(), width=10)
+    salir.place(x=815,y=515)
                         
 def menúOpciones():
     menuPrincipal = Menu(ventana, tearoff=0)
@@ -475,7 +476,7 @@ def perder(coord):
 def ganar():
     revelarTablero()
     #msg.showinfo(message="Has ganado")
-    reiniciar.place(x=50, y=20)
+    reiniciar.place(x=120, y=20)
 
 def colocarMinas(xmax, ymax, tamaño, minasMaximo):
     listaMinas.clear()
@@ -578,6 +579,11 @@ def ocultarSolucion():
 
 reiniciar = Button(ventana, text="Nuevo", command=nuevo)
 reiniciar.place(x=-200, y=-200)
+
+'''mensajeGanar = Label(ventana, image=win)
+mensajeGanar.place(x=-200, y=-200)
+mensajePerder = Label(ventana, image=loser)
+mensajePerder.place(x=-200, y=-300)'''
 
 dificultadFacil()
 menúOpciones()
