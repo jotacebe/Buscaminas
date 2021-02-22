@@ -1,19 +1,10 @@
-###########################################################################################################
-#     COSAS PENDIENTES DE HACER
-#	    - Hacer la ventana Acerca de...
-#       - Terminar el boton Nuevo
-#	    - Cambiar el icono de la ventana del juego.
-#       - Documentar el código.
-#       - Hacer que el tamaño de la ventana y los elementos de la interfaz se adapten al tamaño del tablero.  
-###########################################################################################################
-
 from tkinter import *
 from tkinter import messagebox as msg
 from random import randint
 
 ventana = Tk()
-ventana.geometry("400x400")
 ventana.title("Buscaminas")
+ventana.iconbitmap(default="proyectos/buscaminas/img/bomba.ico")
 
 botonNormal = PhotoImage(file="proyectos/buscaminas/img/botonNormal.gif") 
 bandera = PhotoImage(file="proyectos/buscaminas/img/bandera.gif") 
@@ -49,6 +40,9 @@ florFantasma = PhotoImage(file="proyectos/buscaminas/img/florFantasma.gif")
 florFondo = PhotoImage(file="proyectos/buscaminas/img/florFondo.gif")
 banderaFlor = PhotoImage(file="proyectos/buscaminas/img/banderaFlor.gif")
 ayudaImagen = PhotoImage(file="proyectos/buscaminas/img/ayuda.gif")
+acerdaDeImagen = PhotoImage(file="proyectos/buscaminas/img/acercade.gif")
+bombaGanar = PhotoImage(file="proyectos/buscaminas/img/bombaGanar.gif")
+bombaPerder = PhotoImage(file="proyectos/buscaminas/img/bombaPerder.gif")
 
 listaMinas = []
 listaBotones = []
@@ -84,7 +78,6 @@ contadorBanderas = Label(ventana, font=("Sans Sherif", 14), image=bombaFondo, co
 contadorBanderas.place(x=20, y=20)
 
 pistas = Label(ventana, font=("Sans Sherif", 14), image=bombilla, compound=LEFT)
-pistas.place(x=220, y=20)
 
 def cambiarImagen():
     if opImagen.get() == 1:
@@ -128,54 +121,69 @@ def cambiarImagen():
                 listaBotones[i].config(image=florError)
 
 def dificultadFacil():
+    ventana.resizable(width=False, height=False)
+    pistas.place(x=225, y=20)
     xmax=10
     ymax=10
     tamaño = 100 
     minasMaximo = 10
-    ventana.geometry("300x350")    
+    tamañoVentana = str(marcoBotones.winfo_width() + 40) + "x" + str(marcoBotones.winfo_height() + 80)
+    ventana.geometry(tamañoVentana)
+    ventana.geometry("296x336+100+50")
     opcion.set(1)
     vidas.set(3)
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
-
+    reiniciar.place(x=-300, y=-300)
+    
 def dificultadMedia():
+    ventana.resizable(width=False, height=False)
+    pistas.place(x=350, y=20)
     xmax=15
     ymax=15
     tamaño = 225 
     minasMaximo = 40
     opcion.set(2) 
     vidas.set(5)
-    ventana.geometry("430x500")
+    ventana.geometry("421x461+100+50")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
-
+    reiniciar.place(x=-300, y=-300)
+    
 def dificultadDificil():
+    ventana.resizable(width=False, height=False)
+    pistas.place(x=725, y=20)
     xmax=15 
     ymax=30 
     tamaño = 450
     minasMaximo = 100
     opcion.set(3)
     vidas.set(8)
-    ventana.geometry("800x500")
+    ventana.geometry("796x461+100+50")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
-
+    reiniciar.place(x=-300, y=-300)
+    
 def dificultadExtrema():
+    ventana.resizable(width=False, height=False)
+    pistas.place(x=600, y=20)
     xmax=25 
     ymax=25 
     tamaño = 625 
     minasMaximo = 200 
     opcion.set(4) 
     vidas.set(10)
-    ventana.geometry("680x710")
+    ventana.geometry("671x711+100+50")
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
-
+    reiniciar.place(x=-300, y=-300)
+  
 def dificultadPersonalizada(x, y, t, m):
+    ventana.resizable(width=False, height=False)
     xmax = x
     ymax = y
     tamaño = t
@@ -184,18 +192,38 @@ def dificultadPersonalizada(x, y, t, m):
     dibujarElementos(xmax, ymax, tamaño, minasMaximo)
     contadorBanderas.config(text=str(minasMaximo))
     pistas.config(text=vidas.get())
+    marcoBotones.update()
+    if marcoBotones.winfo_width() + 40 > 250:
+        tamañoVentana = str(marcoBotones.winfo_width() + 40) + "x" + str(marcoBotones.winfo_height() + 80)
+        pistas.place(x=marcoBotones.winfo_width()-31, y=20)
+    else:
+        tamañoVentana = "250x" + str(marcoBotones.winfo_height() + 80)
+        pistas.place(x=179, y=20)
+    ventana.geometry(tamañoVentana)
+    reiniciar.place(x=-300, y=-300)
+
+def acercaDe():
+    ventanaAcercaDe = Toplevel(ventana)
+    ventanaAcercaDe.resizable = False
+    ventanaAcercaDe.geometry("1000x350")
+    ventanaAcercaDe.title("Ayuda")
+    ventanaAcercaDe.attributes("-topmost", True, "-toolwindow", True)
+
+    Label(ventanaAcercaDe, image=acerdaDeImagen).pack()
+    salir = Button(ventanaAcercaDe, text="Salir", command=lambda: ventanaAcercaDe.destroy(), width=10)
+    salir.place(x=900,y=300)
 
 def personalizar():
-    personalizar = Toplevel(ventana)
-    personalizar.resizable(False, False)
-    personalizar.title("Personalizar tablero")
-    personalizar.geometry("500x200")
-    personalizar.attributes("-toolwindow", True, "-topmost", True)
+    ventanaPersonalizar = Toplevel(ventana)
+    ventanaPersonalizar.title("Personalizar tablero")
+    ventanaPersonalizar.geometry("500x200")
+    ventanaPersonalizar.resizable(width=False, height=False)
+    ventanaPersonalizar.attributes("-toolwindow", True, "-topmost", True)
 
-    marco = Frame(personalizar)
+    marco = Frame(ventanaPersonalizar)
     marco.place(x=20, y=20)
 
-    textoProporcion = Label(personalizar)
+    textoProporcion = Label(ventanaPersonalizar)
     textoProporcion.place(x=20, y=120)
 
     primeraCasilla.set(True)
@@ -240,9 +268,9 @@ def personalizar():
         personalizado.append(cuadrosHorizontal.get()*cuadrosVertical.get())
         personalizado.append(minas.get())
         dificultadPersonalizada(personalizado[0], personalizado[1], personalizado[2], personalizado[3])
-        personalizar.destroy()
+        ventanaPersonalizar.destroy()
 
-    confirmar = Button(personalizar, text="Aceptar", command=lambda: enviar())
+    confirmar = Button(ventanaPersonalizar, text="Aceptar", command=lambda: enviar())
     confirmar.place(x=425, y=140)
 
 def imagenAdyacentes(minas):
@@ -331,7 +359,7 @@ def ayuda():
     ventanaAyuda.title("Ayuda")
     ventanaAyuda.attributes("-topmost", True, "-toolwindow", True)
 
-    imagenAyuda = Label(ventanaAyuda, image=ayudaImagen).pack()
+    Label(ventanaAyuda, image=ayudaImagen).pack()
     salir = Button(ventanaAyuda, text="Salir", command=lambda: ventanaAyuda.destroy(), width=10)
     salir.place(x=815,y=515)
                         
@@ -371,7 +399,7 @@ def menúOpciones():
     menuOpciones.add_command(label="Ver solución", command=lambda: revelarTablero(), accelerator="CTRL + R")
 
     menuAyuda.add_command(label="Ayuda", command=ayuda, accelerator="F1")
-    menuAyuda.add_command(label="Acerca de...")
+    menuAyuda.add_command(label="Acerca de...", command=acercaDe)
 
 def nuevo():
     primeraCasilla.set(True)
@@ -470,13 +498,21 @@ def perder(coord):
         listaBotones[coord].config(image=florExplota)
     listaBotones[coord].unbind("<Button-1>")
     revelarTablero()
-    #msg.showinfo(message="Has perdido")
-    reiniciar.place(x=120, y=20)
+    reiniciar.config(image=bombaPerder)
+    if marcoBotones.winfo_width() + 40 > 250:
+        posX = (marcoBotones.winfo_width() + 40) / 2 - 23
+    else:
+        posX = 102
+    reiniciar.place(x=posX, y=20)
 
 def ganar():
     revelarTablero()
-    #msg.showinfo(message="Has ganado")
-    reiniciar.place(x=120, y=20)
+    reiniciar.config(image=bombaGanar)
+    if marcoBotones.winfo_width() + 40 > 250:
+        posX = (marcoBotones.winfo_width() + 40) / 2 - 23
+    else:
+        posX = 102
+    reiniciar.place(x=posX, y=20)
 
 def colocarMinas(xmax, ymax, tamaño, minasMaximo):
     listaMinas.clear()
@@ -552,6 +588,7 @@ def dibujarElementos(xmax, ymax, tamaño, minasMaximo):
     colocarMinas(xmax, ymax, tamaño, minasMaximo)
 
 def solucion():
+    primeraCasilla.set(False)
     for i in range(len(listaMinas)):
         if listaMinas[i] == 1 and listaBotones[i].cget("image") in listaFondo:
             if opImagen.get() == 1:
@@ -579,11 +616,6 @@ def ocultarSolucion():
 
 reiniciar = Button(ventana, text="Nuevo", command=nuevo)
 reiniciar.place(x=-200, y=-200)
-
-'''mensajeGanar = Label(ventana, image=win)
-mensajeGanar.place(x=-200, y=-200)
-mensajePerder = Label(ventana, image=loser)
-mensajePerder.place(x=-200, y=-300)'''
 
 dificultadFacil()
 menúOpciones()

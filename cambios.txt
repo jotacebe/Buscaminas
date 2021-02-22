@@ -88,3 +88,14 @@
   - Completada la ventana de Ayuda.
   - Actualizado la lista de Cosas pendientes
   - Actualizado el archivo cambios.txt
+
+22 de febrero:
+
+  - Se ha hecho que el tamaño de la ventana se adapte al tamaño del tablero.
+  - Se ha hecho que los elementos de la interfaz se adapten al tamaño de la ventana.
+  - Se ha añadido la ventana Acerca de...
+  - Se ha terminado el botón Nuevo
+  - Se han añadido las imágenes del botón Nuevo a la carpeta img
+  - Se ha actualizado la lista de Cosas pendientes.
+  - Se ha actualizado el archivo cambios.txt
+  - Otros cambios menores
